@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Wetterübersicht</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style_index.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body class="{{ wetterdaten[0].klasse if wetterdaten else '' }}">
+  <div class="container">
+
+    <header class="webseiten-header">
+      <h1>🌤️ Wetter in deiner Stadt</h1>
+      <p>Bis zu 3 Städte vergleichen</p>
+    </header>
+
+    <div class="controls">
+        <form method="POST" class="suchformular">
+        <button type="button" onclick="toggleDarkmode()">🌗 Darkmode</button>
+        <input type="text" name="stadt1" placeholder="Stadt 1">
+        <input type="text" name="stadt2" placeholder="Stadt 2">
+        <input type="text" name="stadt3" placeholder="Stadt 3">
+        <button type="submit">🔍 Suchen</button>  
+        </form>
+    </div>
+
+    <div class="wetter-container">
+      {% for stadt in wetterdaten %}
+        <div class="wetter-box {{ stadt.klasse }}">
+          <div class="zeitstempel">Stand: {{ stadt.messzeit }}</div>
+          <h3>{{ stadt.name }}</h3>
+
+          {% if stadt.fehler %}
+            <p style="color: red;">{{ stadt.fehler }}</p>
+          {% else %}
+            <img src="http://openweathermap.org/img/wn/{{ stadt.icon }}@2x.png" alt="Wettericon">
+            <p><strong>{{ stadt.wetter_de }}</strong> – {{ stadt.beschreibung }}</p>
+            <p>🌡️ Temperatur: {{ stadt.temp }} °C</p>
+            <p>🤔 Gefühlt wie: {{ stadt.feels_like }} °C</p>
+            <p>📉 Min: {{ stadt.temp_min }} °C</p>
+            <p>📈 Max: {{ stadt.temp_max }} °C</p>
+            <p>💧 Luftfeuchtigkeit: {{ stadt.humidity }} %</p>
+            <p>🌅 Sonnenaufgang: {{ stadt.sunrise }} Uhr</p>
+            <p>🌇 Sonnenuntergang: {{ stadt.sunset }} Uhr</p>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+  </div>
+  <script>
+  // Beim Laden prüfen ob der Browser im local Storage unter dem Schlüssel darkmode den Wert True gespeichert hat. Wenn True dann war darkmode beim letzten Mal aktiv
+  if (localStorage.getItem("darkmode") === "true") {
+    document.body.classList.add("darkmode"); // dem Body wird die CSS Klasse darkmode hinzugefügt
+  }
+
+  // Button-Klick toggelt Klasse und speichert den Zustand
+  function toggleDarkmode() {
+    document.body.classList.toggle("darkmode"); // Funktion die beim Klicken auf den Darkmodebutton ausgeführt wird, wenn Klasse darkmode noch nicht vorhanden wird sie hinzugeüfgt wenn sie vorhanden ist wird sie entfernt
+    localStorage.setItem("darkmode", document.body.classList.contains("darkmode")); // Speichern des neuen Zustandes im local Storage
+  }
+</script>
+</body>
+<footer class ="footer">
+  © 2025 – Wetterdaten von OpenWeatherMap – Projekt von Pascal Böhm
+</footer>
+
+</html>
