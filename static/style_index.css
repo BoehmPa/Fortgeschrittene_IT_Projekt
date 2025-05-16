@@ -97,7 +97,7 @@ body.darkmode .suchformular button:hover {
   background-color: #0056b3;
 }
 
-/*Formatierung der Ergebnisse*/
+/*Formatierung der Suchergebnisse*/
 .wetter-container {
   display: flex;
   gap: 30px;
