@@ -16,8 +16,11 @@
 <body>
   <!-- Kartencontainer mit Button zur Startseite -->
   <div class="map-container" id="mapContainer">
-    <button class="homepage-button" onclick="window.location.href='/'">🏠 Zurück zur Startseite</button>
     <div id="map"></div>
+  </div>
+  <div class="button-bar">
+  <button class="homepage-button" onclick="window.location.href='/'">🏠 Zurück zur Startseite</button>
+  <button id="darkmodeButton" class="darkmode-toggle" onclick="toggleMapTheme()">🌓 Darkmode</button>
   </div>
   <div class="overlay-controls">
   <button onclick="toggleOverlay('temp')">🌡️<br>Temp</button>
@@ -25,79 +28,119 @@
   <button onclick="toggleOverlay('precipitation')">🌧️<br>Regen</button>
   <button onclick="toggleOverlay('wind')">💨<br>Wind</button>
   </div>
+  
 
   <!-- Leaflet-Kartenbibliothek (JS) -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
-  // Karte initialisieren und auf Deutschland zentrieren
-  const map = L.map('map').setView([51.1657, 10.4515], 5);
-  const apiKey = "{{ api_key }}"; // API-Key aus dem Backend laden
+  // MapTiler-API-Key wird aus dem Flask-Backend übergeben
+  const mapKey = "{{ map_key }}";
 
-  // Begrenzung setzen – verhindert Verschieben aus dem Weltbereich
+  //  OpenWeatherMap API-Key ebenfalls aus dem Flask-Backend
+  const apiKey = "{{ api_key }}";
+
+  // Lightmode-Karte: MapTiler Basic (englisch beschriftet)
+  const lightTiles = L.tileLayer(`https://api.maptiler.com/maps/basic/{z}/{x}/{y}.png?key=${mapKey}`, {
+    tileSize: 512,
+    zoomOffset: -1,
+    attribution: '&copy; <a href="https://www.maptiler.com/copyright/">MapTiler</a>',
+    noWrap: true
+  });
+
+  // Darkmode-Karte: CartoDB Dark Matter
+  const darkTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
+    noWrap: true
+  });
+
+  // Karte initialisieren – Startansicht Deutschland
+  const map = L.map('map', {
+    center: [51.1657, 10.4515],
+    zoom: 5,
+    layers: [lightTiles] // ⬅️ Start mit Lightmap
+  });
+
+  // Weltgrenzen setzen, damit Karte nicht endlos verschoben werden kann
   map.setMaxBounds([
-    [85, -180],   // nördlichste, westlichste Ecke
-    [-85, 180]    // südlichste, östlichste Ecke
+    [85, -180],   // Nordwest
+    [-85, 180]    // Südost
   ]);
 
+  // Statusvariable für Darkmode merken
+  let darkModeActive = false;
 
-  // Hintergrund-Tiles laden
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a>',
-    noWrap: true
-  }).addTo(map);
+  // Umschalter für Light/Dark-Karte
+  function toggleMapTheme() {
+    const button = document.getElementById("darkmodeButton");
 
-  //Windkarten und Temperatur-Overlays
-  //map-overlays definieren
+    if (darkModeActive) {
+      map.removeLayer(darkTiles);      // Dunkle Karte entfernen
+      lightTiles.addTo(map);           // Helle hinzufügen
+      button.classList.remove("active"); // Button zurücksetzen (blau)
+    } else {
+      map.removeLayer(lightTiles);     // Helle Karte entfernen
+      darkTiles.addTo(map);            // Dunkle hinzufügen
+      button.classList.add("active");    // Button aktiv setzen (grau)
+    }
+
+    darkModeActive = !darkModeActive;  // Status umkehren
+  }
+
+  //  Wetteroverlays (OpenWeatherMap) vorbereiten
   const overlays = {
-  temp: L.tileLayer(`https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=${apiKey}`, { opacity: 0.6 }),
-  clouds: L.tileLayer(`https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=${apiKey}`, { opacity: 0.6 }),
-  precipitation: L.tileLayer(`https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=${apiKey}`, { opacity: 0.6 }),
-  wind: L.tileLayer(`https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=${apiKey}`, { opacity: 0.6 })
+    temp: L.tileLayer(`https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=${apiKey}`, { opacity: 0.6 }),
+    clouds: L.tileLayer(`https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=${apiKey}`, { opacity: 0.6 }),
+    precipitation: L.tileLayer(`https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=${apiKey}`, { opacity: 0.6 }),
+    wind: L.tileLayer(`https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=${apiKey}`, { opacity: 0.6 })
   };
+
+  //  Aktive Overlays merken (für späteres Entfernen)
   const activeOverlays = {};
-  
-  // overlays togglebar machen
+
+  //  Toggle-Funktion für Wetterlayer (über Buttons)
   function toggleOverlay(name) {
-  if (activeOverlays[name]) {
-    map.removeLayer(overlays[name]);
-    delete activeOverlays[name];
-  } else {
-    overlays[name].addTo(map);
-    activeOverlays[name] = true;
-  }
+    const button = document.querySelector(`[data-overlay="${name}"]`);
+
+    if (activeOverlays[name]) {
+      map.removeLayer(overlays[name]);         // Layer entfernen
+      delete activeOverlays[name];             // aus aktiven entfernen
+      if (button) button.classList.remove("active"); // Button-Deko zurücksetzen
+    } else {
+      overlays[name].addTo(map);               // Layer hinzufügen
+      activeOverlays[name] = true;             // als aktiv speichern
+      if (button) button.classList.add("active");   // Button aktiv gestalten
+    }
   }
 
+  // Wetterdaten vom Server holen (vom Flask-Backend)
   const weatherData = JSON.parse('{{ weatherdata | tojson | safe }}');
 
+  // Marker für jede Stadt anzeigen
   weatherData.forEach(city => {
     if (!city.error && city.coord) {
       const marker = L.marker([city.coord.lat, city.coord.lon]).addTo(map);
 
-      // Popup mit Wetterinfos
+      // Popup-HTML mit Wetterinfos
       const popupContent = `
         <div class="wetter-box ${city.weather_class}">
-            <strong>${city.name}</strong><br>
-            ${city.weather_ger} – ${city.description}<br>
-            🌡️ ${city.temp} °C<br>
-            💧 ${city.humidity} %<br>
-            <img src="http://openweathermap.org/img/wn/${city.icon}.png" alt="icon">
+          <strong>${city.name}</strong><br>
+          ${city.weather_ger} – ${city.description}<br>
+          🌡️ ${city.temp} °C<br>
+          💧 ${city.humidity} %<br>
+          <img src="http://openweathermap.org/img/wn/${city.icon}.png" alt="icon">
         </div>`;
 
       marker.bindPopup(popupContent);
 
-      // Beim Klick: CSS-Klasse aktualisieren
+      // Hintergrund dynamisch basierend auf Wetterklasse ändern
       marker.on('click', () => {
         const mapContainer = document.getElementById('mapContainer');
-
-        mapContainer.className = "map-container";  // Klassen zurücksetzen
-
-        // Neue Wetterklasse basierend auf city.weather setzen
-        const weatherClass = city.weather_class; // z.B. "clear-day"
-        mapContainer.classList.add(weatherClass);
+        mapContainer.className = "map-container"; // Reset
+        mapContainer.classList.add(city.weather_class); // Neue Wetterklasse hinzufügen
       });
     }
   });
-  </script>
+</script>
 </body>
 </html>

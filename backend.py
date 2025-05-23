@@ -6,6 +6,7 @@ app = Flask(__name__)
 
 API_KEY = "d5184ab550c97fc5751ba70bb99170a0" # API-Key per Anmeldung erhalten, kann trotzdem verwendet werden -> nicht Gerätespezifisch
 WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather"
+MAP_API_KEY = "7c3HAU4Hm6tRFxQau4FQ" # dazu da, eine englischsprachige Map aufzurufen
 
 # Globale Variable für die Wetterdaten
 weatherdata_global = []
@@ -135,7 +136,7 @@ def map():
             "weather_class": weather_class
         }
         safe_weatherdata.append(safe_city)
-    return render_template("map.html", weatherdata=safe_weatherdata, api_key=API_KEY)
+    return render_template("map.html", weatherdata=safe_weatherdata, api_key=API_KEY, map_key=MAP_API_KEY)
 
 # Starte die Anwendung, wenn dieses Skript direkt ausgeführt wird
 if __name__ == "__main__":

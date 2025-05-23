@@ -1,3 +1,4 @@
+/* ========== Grundlayout ========== */
 body {
   font-family: 'Inter', sans-serif;
   margin: 0;
@@ -17,69 +18,64 @@ body {
   height: 100%;
 }
 
-.homepage-button {
- position: absolute;
+/* ========== Buttonleiste oben ========== */
+.button-bar {
+  position: absolute;
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 999;
+  z-index: 1000;
+  display: flex;
+  gap: 12px;
+}
 
+.homepage-button,
+.darkmode-toggle {
   padding: 10px 15px;
   border: none;
-  background-color: #007BFF;
-  color: white;
   border-radius: 8px;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   transition: background-color 0.2s ease;
 }
 
+/* Startseiten-Button */
+.homepage-button {
+  background-color: #007BFF;
+  color: white;
+}
 .homepage-button:hover {
   background-color: #0056b3;
 }
 
-.leaflet-popup-content-wrapper,
-.leaflet-popup-tip {
-  background: white;
-  color: #000;
+/* Darkmode-Button */
+.darkmode-toggle {
+  background-color: #007BFF;
+  color: white;
+}
+.darkmode-toggle:hover {
+  background-color: #0056b3;
+}
+.darkmode-toggle.active {
+  background-color: #444;
+  color: white;
+}
+.darkmode-toggle.active:hover {
+  background-color: #222;
 }
 
-/* Wetterklassen */
-.wetter-box.clear-day { background: linear-gradient(to bottom, #fceabb, #f8b500); }
-.wetter-box.clear-night { background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364); color: white; }
-.wetter-box.clouds-day { background: linear-gradient(to bottom, #d7d2cc, #304352); color: white; }
-.wetter-box.clouds-night { background: linear-gradient(to bottom, #232526, #414345); color: white; }
-.wetter-box.rain-day { background: linear-gradient(to bottom, #a1c4fd, #c2e9fb); }
-.wetter-box.rain-night { background: linear-gradient(to bottom, #434343, #000000); color: white; }
-.wetter-box.snow-day { background: linear-gradient(to bottom, #e0eafc, #cfdef3); }
-.wetter-box.snow-night { background: linear-gradient(to bottom, #2c3e50, #4ca1af); color: white; }
-.wetter-box.clear-sunrise { background: linear-gradient(to bottom, #fdfcfb, #e2d1c3); }
-.wetter-box.clear-sunset { background: linear-gradient(to bottom, #fcb69f, #ffecd2); }
-.wetter-box.clouds-sunrise { background: linear-gradient(to bottom, #c9d6ff, #e2e2e2); }
-.wetter-boxr.clouds-sunset { background: linear-gradient(to bottom, #757f9a, #d7dde8); }
-.wetter-box.rain-sunrise { background: linear-gradient(to bottom, #a1c4fd, #c2e9fb); }
-.wetter-box.rain-sunset { background: linear-gradient(to bottom, #bdc3c7, #2c3e50); color: white; }
-.wetter-box.snow-sunrise { background: linear-gradient(to bottom, #bfd2f6, #ffffff); }
-.wetter-box.snow-sunset { background: linear-gradient(to bottom, #636FA4, #E8CBC0); }
-
-/* Button styles */
-.overlay-controls{
- position: absolute;
-  right: 20px;            /* statt left */
+/* ========== Overlay-Layer Buttons rechts ========== */
+.overlay-controls {
+  position: absolute;
   top: 50%;
+  right: 20px;
   transform: translateY(-50%);
   z-index: 1000;
-
   display: flex;
   flex-direction: column;
   gap: 12px;
-
-  background: none;
-  padding: 0;
-  border: none;
-  box-shadow: none;
 }
 
 .overlay-controls button {
@@ -102,7 +98,7 @@ body {
   transition: background-color 0.2s ease, transform 0.2s ease;
   text-align: center;
   line-height: 1.2;
-  white-space: normal; 
+  white-space: normal;
   word-break: break-word;
 }
 
@@ -110,11 +106,36 @@ body {
   background-color: #0056b3;
   transform: scale(1.05);
 }
+
 .overlay-controls button.active {
-  background-color: #28a745;  /* grün für aktiv */
+  background-color: #28a745;
   box-shadow: 0 0 6px rgba(40, 167, 69, 0.5);
 }
-
 .overlay-controls button.active:hover {
   background-color: #218838;
 }
+
+/* ========== Leaflet Popups ========== */
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background: white;
+  color: #000;
+}
+
+/* ========== Wetterboxen (Popup Inhalt) ========== */
+.wetter-box.clear-day { background: linear-gradient(to bottom, #fceabb, #f8b500); }
+.wetter-box.clear-night { background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364); color: white; }
+.wetter-box.clouds-day { background: linear-gradient(to bottom, #d7d2cc, #304352); color: white; }
+.wetter-box.clouds-night { background: linear-gradient(to bottom, #232526, #414345); color: white; }
+.wetter-box.rain-day { background: linear-gradient(to bottom, #a1c4fd, #c2e9fb); }
+.wetter-box.rain-night { background: linear-gradient(to bottom, #434343, #000000); color: white; }
+.wetter-box.snow-day { background: linear-gradient(to bottom, #e0eafc, #cfdef3); }
+.wetter-box.snow-night { background: linear-gradient(to bottom, #2c3e50, #4ca1af); color: white; }
+.wetter-box.clear-sunrise { background: linear-gradient(to bottom, #fdfcfb, #e2d1c3); }
+.wetter-box.clear-sunset { background: linear-gradient(to bottom, #fcb69f, #ffecd2); }
+.wetter-box.clouds-sunrise { background: linear-gradient(to bottom, #c9d6ff, #e2e2e2); }
+.wetter-box.clouds-sunset { background: linear-gradient(to bottom, #757f9a, #d7dde8); }
+.wetter-box.rain-sunrise { background: linear-gradient(to bottom, #a1c4fd, #c2e9fb); }
+.wetter-box.rain-sunset { background: linear-gradient(to bottom, #bdc3c7, #2c3e50); color: white; }
+.wetter-box.snow-sunrise { background: linear-gradient(to bottom, #bfd2f6, #ffffff); }
+.wetter-box.snow-sunset { background: linear-gradient(to bottom, #636FA4, #E8CBC0); }
