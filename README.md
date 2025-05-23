@@ -7,7 +7,7 @@ Ein modernes Webprojekt zur Anzeige und dem Vergleich von Wetterdaten für bis z
 
 ##  backend.py (Flask-Anwendung)
 
-### 🔹 Funktion: `/`
+### Funktion: `/`
 - Holt bis zu 3 Städte über Form-POST
 - Ruft pro Stadt die OpenWeatherMap-API auf
 - Extrahiert: Temperatur, Wetter, Icon, Min/Max, Feuchtigkeit, Sonnenauf-/untergang, etc.
@@ -26,7 +26,7 @@ Ein modernes Webprojekt zur Anzeige und dem Vergleich von Wetterdaten für bis z
 - **Ausgabe in `.wetter-box`-Karten**
 - **Jinja2-Template** (`{{ }}` & `{% %}`) für dynamischen Inhalt
 
-### 🔹 Besonderheiten
+### Besonderheiten
 - Icons via OpenWeather (`img src=...`)
 - Ausgabe von:
   - Temperatur, gefühlt
