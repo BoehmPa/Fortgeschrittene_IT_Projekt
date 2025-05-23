@@ -115,6 +115,7 @@ def home():
     return render_template("index.html", weatherdata=weatherdata)
 
 @app.route("/karte")
+
 def map():
     if not weatherdata_global:
         return "Bitte zuerst Städte auf der Startseite eingeben.", 400
@@ -134,7 +135,7 @@ def map():
             "weather_class": weather_class
         }
         safe_weatherdata.append(safe_city)
-    return render_template("map.html", weatherdata=safe_weatherdata)
+    return render_template("map.html", weatherdata=safe_weatherdata, api_key=API_KEY)
 
 # Starte die Anwendung, wenn dieses Skript direkt ausgeführt wird
 if __name__ == "__main__":

@@ -16,8 +16,14 @@
 <body>
   <!-- Kartencontainer mit Button zur Startseite -->
   <div class="map-container" id="mapContainer">
-    <button onclick="window.location.href='/'">🏠 Zurück zur Startseite</button>
+    <button class="homepage-button" onclick="window.location.href='/'">🏠 Zurück zur Startseite</button>
     <div id="map"></div>
+  </div>
+  <div class="overlay-controls">
+  <button onclick="toggleOverlay('temp')">🌡️<br>Temp</button>
+  <button onclick="toggleOverlay('clouds')">☁️<br>Wolken</button>
+  <button onclick="toggleOverlay('precipitation')">🌧️<br>Regen</button>
+  <button onclick="toggleOverlay('wind')">💨<br>Wind</button>
   </div>
 
   <!-- Leaflet-Kartenbibliothek (JS) -->
@@ -26,6 +32,7 @@
   <script>
   // Karte initialisieren und auf Deutschland zentrieren
   const map = L.map('map').setView([51.1657, 10.4515], 5);
+  const apiKey = "{{ api_key }}"; // API-Key aus dem Backend laden
 
   // Begrenzung setzen – verhindert Verschieben aus dem Weltbereich
   map.setMaxBounds([
@@ -33,11 +40,33 @@
     [-85, 180]    // südlichste, östlichste Ecke
   ]);
 
+
   // Hintergrund-Tiles laden
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a>',
     noWrap: true
   }).addTo(map);
+
+  //Windkarten und Temperatur-Overlays
+  //map-overlays definieren
+  const overlays = {
+  temp: L.tileLayer(`https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=${apiKey}`, { opacity: 0.6 }),
+  clouds: L.tileLayer(`https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=${apiKey}`, { opacity: 0.6 }),
+  precipitation: L.tileLayer(`https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=${apiKey}`, { opacity: 0.6 }),
+  wind: L.tileLayer(`https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=${apiKey}`, { opacity: 0.6 })
+  };
+  const activeOverlays = {};
+  
+  // overlays togglebar machen
+  function toggleOverlay(name) {
+  if (activeOverlays[name]) {
+    map.removeLayer(overlays[name]);
+    delete activeOverlays[name];
+  } else {
+    overlays[name].addTo(map);
+    activeOverlays[name] = true;
+  }
+  }
 
   const weatherData = JSON.parse('{{ weatherdata | tojson | safe }}');
 

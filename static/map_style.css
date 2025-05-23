@@ -17,22 +17,26 @@ body {
   height: 100%;
 }
 
-button {
-  position: absolute;
+.homepage-button {
+ position: absolute;
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 999;
+
   padding: 10px 15px;
   border: none;
   background-color: #007BFF;
   color: white;
   border-radius: 8px;
   font-size: 1rem;
+  font-weight: 500;
   cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  transition: background-color 0.2s ease;
 }
 
-button:hover {
+.homepage-button:hover {
   background-color: #0056b3;
 }
 
@@ -42,7 +46,7 @@ button:hover {
   color: #000;
 }
 
-/* Wetterklassen – getestet und funktionieren garantiert */
+/* Wetterklassen */
 .wetter-box.clear-day { background: linear-gradient(to bottom, #fceabb, #f8b500); }
 .wetter-box.clear-night { background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364); color: white; }
 .wetter-box.clouds-day { background: linear-gradient(to bottom, #d7d2cc, #304352); color: white; }
@@ -59,3 +63,58 @@ button:hover {
 .wetter-box.rain-sunset { background: linear-gradient(to bottom, #bdc3c7, #2c3e50); color: white; }
 .wetter-box.snow-sunrise { background: linear-gradient(to bottom, #bfd2f6, #ffffff); }
 .wetter-box.snow-sunset { background: linear-gradient(to bottom, #636FA4, #E8CBC0); }
+
+/* Button styles */
+.overlay-controls{
+ position: absolute;
+  right: 20px;            /* statt left */
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1000;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  background: none;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+}
+
+.overlay-controls button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  width: 80px;
+  height: 80px;
+  padding: 8px;
+
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  text-align: center;
+  line-height: 1.2;
+  white-space: normal; 
+  word-break: break-word;
+}
+
+.overlay-controls button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+.overlay-controls button.active {
+  background-color: #28a745;  /* grün für aktiv */
+  box-shadow: 0 0 6px rgba(40, 167, 69, 0.5);
+}
+
+.overlay-controls button.active:hover {
+  background-color: #218838;
+}
