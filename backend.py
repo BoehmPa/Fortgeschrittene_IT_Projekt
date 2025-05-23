@@ -22,7 +22,7 @@ def unix_to_local_datetime(timestamp, offset_seconds):
 # Startseite der App, GET zum Anzeigen, POST wenn Nutzer Städte eingegeben hat
 @app.route("/", methods=["GET", "POST"])
 def home():
-    wetterdaten = []  # Liste zum Sammeln der Wetterdaten
+    weatherdata = []  # Liste zum Sammeln der Wetterdaten
 
     if request.method == "POST":
         # Schleife über die 3 Eingabefelder (stadt1, stadt2, stadt3)
@@ -41,9 +41,12 @@ def home():
                 if response.status_code == 200:
                     data = response.json()  # Antwort in JSON umwandeln -> Weiterverarbeitung
 
-                    # Uhrzeiten für Sonnenaufgang und Sonnenuntergang herausfinden
+                    # lokale Uhrzeit
                     now_local = datetime.now(timezone.utc) + timedelta(seconds=data["timezone"])
-                    
+
+                    # Lokale aktuelle Uhrzeit berechnen (für Anzeige)
+                    local_time_str = now_local.strftime('%H:%M') + "Uhr"
+
                     # Sonnenauf- und -untergang in lokale Zeit umwandeln
                     # Diese Zeitstempel sind in UTC und müssen in die jeweilige Ortszeit der Stadt umgerechnet werden
                     sunrise_local = unix_to_local_datetime(data["sys"]["sunrise"], data["timezone"])
@@ -51,9 +54,8 @@ def home():
                     
                     # Die berechneten lokalen Zeiten (datetime-Objekte) werden nun formatiert
                     # Die Uhrzeiten werden als String im Format "HH:MM" gespeichert, um sie später im Frontend anzuzeigen
-                    sunrise_str = sunrise_local.strftime('%H:%M')
-                    sunset_str = sunset_local.strftime('%H:%M')
-
+                    sunrise_str = sunrise_local.strftime('%H:%M') + "Uhr"
+                    sunset_str = sunset_local.strftime('%H:%M') + "Uhr"
                     # Übergangsphasen definieren
                     if now_local < sunrise_local:
                         tageszeit = "night"
@@ -67,7 +69,7 @@ def home():
                         tageszeit = "day"
 
                     # Zusammenbauen der Wetterklasse, um dynamische Hintergründe zu ermöglichen
-                    wetter_uebersetzung = {
+                    wetter_translation = {
                         "clear": "Klar",
                         "clouds": "Bewölkt",
                         "rain": "Regen",
@@ -76,15 +78,15 @@ def home():
                         "drizzle": "Nieselregen",
                         "mist": "Nebel"
                     }
-                    wetterlage_en = data["weather"][0]["main"].lower()
-                    wetterlage_de = wetter_uebersetzung.get(wetterlage_en, wetterlage_en)
-                    wetterklasse = f"{wetterlage_en}-{tageszeit}"
+                    weatherclass_en = data["weather"][0]["main"].lower()
+                    weatherclass_ger = wetter_translation.get(weatherclass_en, weatherclass_en)
+                    weather_class = f"{weatherclass_en}-{tageszeit}"
                     # Daten aus JSON extrahieren und abspeichern
-                    wetterdaten.append({
+                    weatherdata.append({
                         "name": data["name"],                               # Stadtname
                         "icon": data["weather"][0]["icon"],                 # Wetter-Icon
-                        "wetter": data["weather"][0]["main"],               # z.B. "Rain"
-                        "beschreibung": data["weather"][0]["description"],  # z.B. "leichter Regen"
+                        "weather": data["weather"][0]["main"],               # z.B. "Rain"
+                        "description": data["weather"][0]["description"],  # z.B. "leichter Regen"
                         "temp": data["main"]["temp"],                       # Temperatur
                         "feels_like": data["main"]["feels_like"],           # Gefühlt wie
                         "temp_min": data["main"]["temp_min"],               # Tagesminimale Temperatur
@@ -93,18 +95,18 @@ def home():
                         "sunrise": sunrise_str,                             # Sonnenaufgang
                         "sunset": sunset_str,                               # Sonnenuntergang 
                         "messzeit": datetime.fromtimestamp(data["dt"]).strftime("%d.%m.%Y %H:%M"), # umgewandelter Messzeitpunkt der Daten
-                        "klasse": wetterklasse,                             # für die dynamischen Hintergründe
-                        "wetter_de": wetterlage_de                          # Übersetzung der Wetterlage  
-
+                        "weather_class": weather_class,                             # für die dynamischen Hintergründe
+                        "weather_ger": weatherclass_ger,                      # Übersetzung der Wetterlage  
+                        "local_time": local_time_str                            # Ortszeit
                     })
                 else:
-                    wetterdaten.append({
+                    weatherdata.append({
                         "name": stadt,
-                        "fehler": "Keine Wetterdaten gefunden" # Wenn Stadt nicht gefunden -> Fehlermeldung
+                        "error": "Keine Wetterdaten gefunden" # Wenn Stadt nicht gefunden -> Fehlermeldung
                     })
 
     # HTML-Template anzeigen und Wetterdaten übergeben
-    return render_template("index.html", wetterdaten=wetterdaten)
+    return render_template("index.html", weatherdata=weatherdata)
 
 # Starte die Anwendung, wenn dieses Skript direkt ausgeführt wird
 if __name__ == "__main__":

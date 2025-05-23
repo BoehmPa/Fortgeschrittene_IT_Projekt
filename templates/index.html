@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style_index.css') }}">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
-<body class="{{ wetterdaten[0].klasse if wetterdaten else '' }}">
+<body class="{{ weatherdata[0].weather_class if weatherdata else '' }}">
   <div class="container">
 
     <header class="webseiten-header">
@@ -25,28 +25,28 @@
     </div>
 
     <div class="wetter-container">
-      {% for stadt in wetterdaten %}
-        <div class="wetter-box {{ stadt.klasse }}">
-          <div class="zeitstempel">Stand: {{ stadt.messzeit }}</div>
-          <h3>{{ stadt.name }}</h3>
+      {% for city in weatherdata %}
+        <div class="wetter-box {{ city.weather_class }}">
+          <div class="zeitstempel">Stand: {{ city.messzeit }}</div>
+          <h3>{{ city.name }}</h3>
 
-          {% if stadt.fehler %}
-            <p style="color: red;">{{ stadt.fehler }}</p>
+          {% if city.error %}
+            <p style="color: red;">{{ city.error }}</p>
           {% else %}
-            <img src="http://openweathermap.org/img/wn/{{ stadt.icon }}@2x.png" alt="Wettericon">
-            <p><strong>{{ stadt.wetter_de }}</strong> – {{ stadt.beschreibung }}</p>
-            <p>🌡️ Temperatur: {{ stadt.temp }} °C</p>
-            <p>🤔 Gefühlt wie: {{ stadt.feels_like }} °C</p>
-            <p>📉 Min: {{ stadt.temp_min }} °C</p>
-            <p>📈 Max: {{ stadt.temp_max }} °C</p>
-            <p>💧 Luftfeuchtigkeit: {{ stadt.humidity }} %</p>
-            <p>🌅 Sonnenaufgang: {{ stadt.sunrise }} Uhr</p>
-            <p>🌇 Sonnenuntergang: {{ stadt.sunset }} Uhr</p>
+            <img src="http://openweathermap.org/img/wn/{{ city.icon }}@2x.png" alt="Wettericon">
+            <p><strong>{{ city.weather_ger }}</strong> – {{ city.description }}</p>
+            <p>🌡️ Temperatur: {{ city.temp }} °C</p>
+            <p>🤔 Gefühlt wie: {{ city.feels_like }} °C</p>
+            <p>📉 Min: {{ city.temp_min }} °C</p>
+            <p>📈 Max: {{ city.temp_max }} °C</p>
+            <p>💧 Luftfeuchtigkeit: {{ city.humidity }} %</p>
+            <p>🌅 Sonnenaufgang: {{ city.sunrise }}</p>
+            <p>🌇 Sonnenuntergang: {{ city.sunset }}</p>
+            <p>🕓 Lokale Uhrzeit: {{ city.local_time }}</p>
           {% endif %}
         </div>
       {% endfor %}
     </div>
-
   </div>
   <script>
   // Beim Laden prüfen ob der Browser im local Storage unter dem Schlüssel darkmode den Wert True gespeichert hat. Wenn True dann war darkmode beim letzten Mal aktiv
