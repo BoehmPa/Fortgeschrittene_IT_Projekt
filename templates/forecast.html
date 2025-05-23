@@ -7,7 +7,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
 <body>
   <header>
     <h1>🌤️ Wettervorhersage</h1>
@@ -21,29 +20,33 @@
         <h2>{{ city.city }}</h2>
 
         {% if city.forecasts %}
+          <!-- Wetter-Symbole -->
           <div class="symbolleiste">
             <h3>Wetterverlauf</h3>
             <div class="icons">
-              {% set last_date = "" %}
               {% set last_day = "" %}
-{% for entry in city.forecasts %}
-  {% set current_day = entry.timestamp[:10] %}
-  <div class="symbol-eintrag">
-    {% if current_day != last_day %}
-      <span class="wochentag">{{ current_day | datetimeformat('%A, %d.%m.') }}</span>
-      {% set last_day = current_day %}
-    {% else %}
-      <span class="wochentag">&nbsp;</span>
-    {% endif %}
-    <img src="http://openweathermap.org/img/wn/{{ entry.icon }}@2x.png" alt="icon">
-    <span class="uhrzeit">{{ entry.timestamp[11:16] }}</span>
-  </div>
-{% endfor %}
+              {% for entry in city.forecasts %}
+                {% set current_day = entry.timestamp[:10] %}
+                <div class="symbol-eintrag">
+                  {% if current_day != last_day %}
+                    <span class="wochentag">{{ entry.timestamp[:10] | datetimeformat('%A, %d.%m.') }}</span>
+                    {% set last_day = current_day %}
+                  {% else %}
+                    <span class="wochentag">&nbsp;</span>
+                  {% endif %}
+                  <img src="http://openweathermap.org/img/wn/{{ entry.icon }}@2x.png" alt="icon">
+                  <span class="uhrzeit">{{ entry.timestamp[11:16] }}</span>
+                </div>
+              {% endfor %}
             </div>
           </div>
 
-          <!-- Temperaturverlauf -->
-          <canvas id="chart-{{ loop.index0 }}"></canvas>
+          <!-- Temperatur-Chart -->
+          <div class="chart-wrapper">
+            <div class="chart-container">
+              <canvas id="chart-{{ loop.index0 }}"></canvas>
+            </div>
+          </div>
         {% else %}
           <p class="error">❗Keine Vorhersagedaten verfügbar.</p>
         {% endif %}
@@ -55,6 +58,7 @@
     <p>Quelle: OpenWeatherMap • Stand: {{ forecastdata[0].forecasts[0].timestamp if forecastdata and forecastdata[0].forecasts }}</p>
   </footer>
 
+  <!-- Forecastdaten aus Flask -->
   <script id="forecast-json" type="application/json">
     {{ forecastdata | tojson | safe }}
   </script>
@@ -89,6 +93,7 @@
         },
         options: {
           responsive: true,
+          maintainAspectRatio: false,
           plugins: {
             legend: { display: false },
             tooltip: { mode: 'index', intersect: false }
@@ -109,9 +114,9 @@
     // Darkmode beim Laden wiederherstellen
     if (localStorage.getItem("darkmode") === "true") {
       document.body.classList.add("darkmode");
+      document.documentElement.classList.add("darkmode");
     }
 
-    // Toggle-Funktion
     function toggleDarkmode() {
       const isDark = document.body.classList.toggle("darkmode");
       document.documentElement.classList.toggle("darkmode", isDark);

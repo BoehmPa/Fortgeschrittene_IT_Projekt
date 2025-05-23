@@ -22,7 +22,6 @@ header h1 {
   font-size: 2rem;
 }
 
-/* ========== Link-Buttons ========== */
 .button-link {
   display: inline-block;
   margin-top: 10px;
@@ -47,20 +46,15 @@ main.forecast-container {
 
 /* ========== Einzelner Stadtbereich ========== */
 .city-forecast {
-  margin-bottom: 60px;
+  margin-bottom: 40px;
   text-align: left;
-}
-
-.city-forecast h2 {
-  margin-bottom: 10px;
-  color: #007BFF;
 }
 
 /* ========== Symbolleiste ========== */
 .symbolleiste {
   padding: 20px;
   margin-top: 20px;
-  background: linear-gradient(to bottom, #dce3ea, #cfd8e3); 
+  background: linear-gradient(to bottom, #dce3ea, #cfd8e3);
   border-radius: 12px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   max-width: 90%;
@@ -83,45 +77,37 @@ main.forecast-container {
 }
 
 .symbol-eintrag {
- display: flex;
+  display: flex;
   flex-direction: column;
   align-items: center;
   flex-shrink: 0;
-  min-width: 60px;
+  width: 60px;
 }
 
 .symbol-eintrag .wochentag {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #1a73e8;
-  height: 28px; /* reserviert vertikalen Platz */
-  text-align: center;
-  line-height: 1.2;
-  white-space: nowrap;
-}
-.symbol-eintrag .wochentag.leer {
-  color: transparent; /* nimmt Platz ein, ohne sichtbar zu sein */
+  font-size: 0.7rem;
+  height: 1.1rem;
+  margin-bottom: 3px;
 }
 
 .symbol-eintrag img {
   width: 48px;
   height: 48px;
-  image-rendering: crisp-edges;
 }
 
 .symbol-eintrag .uhrzeit {
   font-size: 0.75rem;
   color: #444;
   margin-top: 4px;
-  text-align: center;
 }
 
 /* ========== Chart-Styling ========== */
 .city-forecast canvas {
   display: block;
   margin: 30px auto;
-  max-width: 95%;
-  height: auto;
+  width: 100%;
+  max-width: 90%;
+  height: 180px !important; /* Nur Länge, nicht Höhe */
 }
 
 /* ========== Fehleranzeige ========== */
@@ -174,14 +160,12 @@ body.darkmode .forecast-box {
 }
 
 body.darkmode .city-forecast {
-  background-color: transparent;
+  background-color: #1c1c1c;
 }
 
-body.darkmode .forecast-box .time {
-  color: #f0f0f0;
-}
-
-body.darkmode .symbol-eintrag .uhrzeit {
+body.darkmode .forecast-box .time,
+body.darkmode .symbol-eintrag .uhrzeit,
+body.darkmode .symbol-eintrag .wochentag {
   color: #ccc;
 }
 
@@ -190,7 +174,16 @@ body.darkmode footer {
   color: #aaa;
   border-top: 1px solid #333;
 }
+.chart-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
 
-body.darkmode .symbol-eintrag .tag {
-  color: #ccc;
+.chart-container {
+  width: 95%;
+  max-width: 1500px;
+  height: 250px; /* Geringe Höhe, aber volle Breite */
+  position: relative;
 }
