@@ -121,3 +121,7 @@ body {
 .wetter-box.rain-sunset { background: linear-gradient(to bottom, #bdc3c7, #2c3e50); color: white; }
 .wetter-box.snow-sunrise { background: linear-gradient(to bottom, #bfd2f6, #ffffff); }
 .wetter-box.snow-sunset { background: linear-gradient(to bottom, #636FA4, #E8CBC0); }
+.wetter-box.drizzle-day {background: linear-gradient(to bottom, #cad9e3, #c1cbd0); }
+.wetter-box.drizzle-night {background: linear-gradient(to bottom,#2c3e50, #4b79a1); color: white; }
+.wetter-box.drizzle-sunrise{background: linear-gradient(to bottom, #dae2f8, #d6a4a4); }
+.wetter-box.drizzle-sunset{background: linear-gradient(to bottom, #485563, #29323c); color: white; }

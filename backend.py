@@ -7,9 +7,16 @@ app = Flask(__name__)
 API_KEY = "d5184ab550c97fc5751ba70bb99170a0" # API-Key per Anmeldung erhalten, kann trotzdem verwendet werden -> nicht Gerätespezifisch
 WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather"
 MAP_API_KEY = "7c3HAU4Hm6tRFxQau4FQ" # dazu da, eine englischsprachige Map aufzurufen
+FORECAST_URL = "https://api.openweathermap.org/data/2.5/forecast"
 
-# Globale Variable für die Wetterdaten
-weatherdata_global = []
+
+weatherdata_global = []  # globale Variable für die Wetterdaten
+
+
+# ================================
+# HILFSFUNKTIONEN
+# ================================
+
 # Hilfsfunktion: Unix-Timestamp (z.B. von Sonnenaufgang) in lesbare Uhrzeit umwandeln
 def unix_to_time(timestamp, offset_seconds):
     # Wandelt Unix-Zeit + Offset in 'HH:MM' lokale Zeit um
@@ -21,6 +28,40 @@ def unix_to_local_datetime(timestamp, offset_seconds):
     # Gibt ein datetime-Objekt in lokaler Zeit zurück (für Vergleiche)
     utc_time = datetime.fromtimestamp(timestamp, tz=timezone.utc)
     return utc_time + timedelta(seconds=offset_seconds)
+
+def get_forecast(cityname):
+    params = {
+        "q": cityname,
+        "appid": API_KEY,
+        "units": "metric",
+        "lang": "de"
+    }
+    response = requests.get(FORECAST_URL, params=params)
+
+    if response.status_code == 200:
+        raw_data = response.json()
+        forecasts = []
+        for entry in raw_data["list"]:
+            forecasts.append({
+                "timestamp": entry["dt_txt"],
+                "temp": entry["main"]["temp"],
+                "description": entry["weather"][0]["description"],
+                "icon": entry["weather"][0]["icon"],
+                "humidity": entry["main"]["humidity"],
+                "wind": entry["wind"]["speed"]
+            })
+
+        return {
+            "city": raw_data["city"]["name"],
+            "forecasts": forecasts
+        }
+    else:
+        return {
+            "city": cityname,
+            "forecasts": [],
+            "error": "Vorhersage nicht verfügbar"
+        }
+
 
 # Startseite der App, GET zum Anzeigen, POST wenn Nutzer Städte eingegeben hat
 @app.route("/", methods=["GET", "POST"])
@@ -137,6 +178,19 @@ def map():
         }
         safe_weatherdata.append(safe_city)
     return render_template("map.html", weatherdata=safe_weatherdata, api_key=API_KEY, map_key=MAP_API_KEY)
+
+@app.route("/vorhersage")
+def forecast():
+    if not weatherdata_global:
+        return "Bitte zuerst Städte auf der Startseite eingeben.", 400
+    
+    forecastdata = []
+    for city in weatherdata_global:
+        if not city.get("error"):
+            forecastdata.append(get_forecast(city["name"]))
+
+    return render_template("forecast.html", forecastdata=forecastdata)
+
 
 # Starte die Anwendung, wenn dieses Skript direkt ausgeführt wird
 if __name__ == "__main__":

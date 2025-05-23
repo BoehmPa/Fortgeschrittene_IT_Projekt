@@ -1,0 +1,153 @@
+/* ========== Grundlayout-Struktur für Sticky Footer ========== */
+html, body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Inter', sans-serif;
+  background-color: #f5f6f7;
+  color: #333;
+}
+
+/* ========== Header ========== */
+header {
+  text-align: center;
+  background-color: #007BFF;
+  color: white;
+  padding: 20px 0;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+/* ========== Link-Buttons ========== */
+.button-link {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 16px;
+  background-color: white;
+  color: #007BFF;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.button-link:hover {
+  background-color: #f0f0f0;
+}
+
+/* ========== Hauptcontainer für Vorhersage ========== */
+main.forecast-container {
+  flex: 1 0 auto;
+  padding: 20px;
+}
+
+/* ========== Einzelner Stadtbereich ========== */
+.city-forecast {
+  margin-bottom: 40px;
+  text-align: left;
+}
+
+.city-forecast h2 {
+  margin-bottom: 10px;
+  color: #007BFF;
+}
+
+/* ========== Scroll-Leiste für Vorhersagekarten (optional) ========== */
+.forecast-scroll {
+  display: flex;
+  overflow-x: auto;
+  gap: 12px;
+  padding: 10px 0;
+}
+
+/* ========== Einzelne Vorhersagekarte ========== */
+.forecast-box {
+  min-width: 130px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  padding: 10px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.forecast-box img {
+  width: 50px;
+  height: 50px;
+}
+
+.forecast-box .time {
+  font-size: 0.8rem;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.forecast-box p {
+  margin: 6px 0;
+}
+
+/* ========== Chart-Styling ========== */
+.city-forecast canvas {
+  display: block;
+  margin: 20px auto 30px 0;
+  max-width:100%;
+  height: auto;
+}
+
+/* ========== Fehleranzeige ========== */
+.error {
+  color: red;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* ========== Footer ========== */
+footer {
+  flex-shrink: 0;
+  text-align: center;
+  padding: 20px;
+  font-size: 0.9rem;
+  color: #777;
+  background: #f5f6f7;
+  border-top: 1px solid #ccc;
+}
+
+/* ========== Darkmode ========== */
+body.darkmode {
+  background-color: #121212;
+  color: #f0f0f0;
+}
+
+body.darkmode header {
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+}
+
+body.darkmode .button-link {
+  background-color: #2a2a2a;
+  color: #f0f0f0;
+  border: 1px solid #444;
+}
+
+body.darkmode .button-link:hover {
+  background-color: #444;
+}
+
+body.darkmode .forecast-box {
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+}
+
+body.darkmode .forecast-box .time {
+  color: #f0f0f0;
+}
+
+body.darkmode footer {
+  background-color: #1e1e1e;
+  color: #aaa;
+  border-top: 1px solid #333;
+}

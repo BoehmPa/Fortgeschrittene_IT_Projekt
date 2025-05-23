@@ -1,3 +1,4 @@
+/* ========== Grundlayout & Schriftart ========== */
 body {
   font-family: 'Inter', sans-serif;
   margin: 0;
@@ -11,7 +12,7 @@ body {
   padding: 30px;
 }
 
-/* Formatierung des Headers der Webseite */
+/* ========== Header ========== */
 .webseiten-header {
   text-align: center;
   padding: 40px 20px 30px 20px;
@@ -31,20 +32,20 @@ body {
   font-size: 1.2rem;
   color: #444;
   margin-top: 10px;
+}
+
 header {
   text-align: center;
   margin-bottom: 40px;
 }
-}
 
-/* Darkmode */
+/* ========== Darkmode ========== */
 body.darkmode {
   background-color: #121212;
   color: #f0f0f0;
 }
 
 body.darkmode .wetter-box {
-  /*background: linear-gradient(to bottom, #1f1f1f, #2c2c2c);*/
   color: #f0f0f0;
 }
 
@@ -59,18 +60,33 @@ body.darkmode .suchformular button:hover {
   background-color: #444;
 }
 
-/* Formatierung von den Einstellungen (Darkmode, Suchbutton, Städte */
+body.darkmode .button-link {
+  background-color: #2a2a2a;
+  color: white;
+  border: 1px solid #444;
+}
+
+body.darkmode .button-link:hover {
+  background-color: #444;
+}
+
+body.darkmode footer {
+  background-color: #1e1e1e;
+  color: #aaa;
+  border-top: 1px solid #333;
+}
+
+/* ========== Steuerelemente & Suchformular ========== */
 .controls {
   display: flex;
   justify-content: center;
   margin: 30px 0;
 }
 
-/* Formatierung des Suchformulars zum Eingeben der gewünschten Städte*/
 .suchformular {
   display: flex;
   justify-content: center;
-  flex-wrap: wrap; /* bestimmt, ob ein Element innerhalb der Flexbox in eine neue Zeile umbrechen darf, sollte kein Platz mehr verfügbar sein*/
+  flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 40px;
 }
@@ -97,7 +113,18 @@ body.darkmode .suchformular button:hover {
   background-color: #0056b3;
 }
 
-/*Formatierung der Suchergebnisse*/
+.navi-buttons {
+  position: absolute;
+  top: 80%;
+  right: 20px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  z-index: 1000;
+}
+
+/* ========== Wetteranzeige Container ========== */
 .wetter-container {
   display: flex;
   gap: 30px;
@@ -105,7 +132,7 @@ body.darkmode .suchformular button:hover {
   flex-wrap: wrap;
 }
 
-/*Basisklasse zum Anzeigen des Wetters*/
+/* ========== Wetterbox ========== */
 .wetter-box {
   width: 280px;
   padding: 20px;
@@ -148,77 +175,79 @@ body.darkmode .suchformular button:hover {
   color: rgba(100, 100, 100, 0.5);
 }
 
-/* Wetterklassen */
+/* ========== Wetterzustände (Farbklassen) ========== */
 .wetter-box.clear-day {
   background: linear-gradient(to bottom, #fceabb, #f8b500);
 }
-
 .wetter-box.clear-night {
   background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
   color: white;
 }
-
 .wetter-box.clouds-day {
   background: linear-gradient(to bottom, #d7d2cc, #304352);
 }
-
 .wetter-box.clouds-night {
   background: linear-gradient(to bottom, #232526, #414345);
   color: white;
 }
-
 .wetter-box.rain-day {
   background: linear-gradient(to bottom, #a1c4fd, #c2e9fb);
 }
-
 .wetter-box.rain-night {
   background: linear-gradient(to bottom, #434343, #000000);
   color: white;
 }
-
 .wetter-box.snow-day {
   background: linear-gradient(to bottom, #e0eafc, #cfdef3);
 }
-
 .wetter-box.snow-night {
   background: linear-gradient(to bottom, #2c3e50, #4ca1af);
   color: white;
 }
-
 .wetter-box.clear-sunrise {
   background: linear-gradient(to bottom, #fdfcfb, #e2d1c3);
 }
-
 .wetter-box.clear-sunset {
   background: linear-gradient(to bottom, #fcb69f, #ffecd2);
 }
-
 .wetter-box.clouds-sunrise {
   background: linear-gradient(to bottom, #c9d6ff, #e2e2e2);
 }
-
 .wetter-box.clouds-sunset {
   background: linear-gradient(to bottom, #757f9a, #d7dde8);
 }
-
 .wetter-box.rain-sunrise {
   background: linear-gradient(to bottom, #a1c4fd, #c2e9fb);
 }
-
 .wetter-box.rain-sunset {
   background: linear-gradient(to bottom, #bdc3c7, #2c3e50);
   color: white;
 }
-
 .wetter-box.snow-sunrise {
   background: linear-gradient(to bottom, #bfd2f6, #ffffff);
 }
-
 .wetter-box.snow-sunset {
   background: linear-gradient(to bottom, #636FA4, #E8CBC0);
 }
+.wetter-box.drizzle-day {
+  background: linear-gradient(to bottom, #cfd9df, #e2ebf0);
+}
 
-/*Formatierung des Footers*/
+.wetter-box.drizzle-night {
+  background: linear-gradient(to bottom, #2c3e50, #4b79a1);
+  color: white;
+}
+
+.wetter-box.drizzle-sunrise {
+  background: linear-gradient(to bottom, #dae2f8, #d6a4a4);
+}
+
+.wetter-box.drizzle-sunset {
+  background: linear-gradient(to bottom, #485563, #29323c);
+  color: white;
+}
+
+/* ========== Footer ========== */
 .footer {
   position: fixed;
   bottom: 0;
@@ -233,35 +262,28 @@ body.darkmode .suchformular button:hover {
   box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
 }
 
+/* ========== Link-Buttons (Startseite etc.) ========== */
 .button-link {
-  display: inline-block;
-  padding: 10px 20px;
+   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  padding: 8px;
   background-color: #007BFF;
   color: white;
-  text-decoration: none;     /* Unterstreichung entfernen */
   border: none;
-  border-radius: 8px;
-  font-size: 1rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
   font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  line-height: normal;
-  height: 42px;               /* Exakt gleiche Höhe wie .suchformular button */
-  vertical-align: middle;    /* Bessere Ausrichtung */
-  box-sizing: border-box;
-  margin-left: 10px;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  line-height: 1.2;
 }
 
 .button-link:hover {
   background-color: #0056b3;
-}
-
-body.darkmode .button-link {
-  background-color: #2a2a2a;
-  color: white;
-  border: 1px solid #444;
-}
-
-body.darkmode .button-link:hover {
-  background-color: #444;
+  transform: scale(1.05);
 }
