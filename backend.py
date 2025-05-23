@@ -4,6 +4,14 @@ from datetime import datetime, timedelta, timezone
 
 app = Flask(__name__)
 
+@app.template_filter('datetimeformat')
+def datetimeformat(value, format='%A, %d.%m.'):
+    if len(value) == 10:  # Nur das Datum "YYYY-MM-DD"
+        dt = datetime.strptime(value, '%Y-%m-%d')
+    else:  # Kompletter Zeitstempel mit Uhrzeit
+        dt = datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
+    return dt.strftime(format)
+
 API_KEY = "d5184ab550c97fc5751ba70bb99170a0" # API-Key per Anmeldung erhalten, kann trotzdem verwendet werden -> nicht Gerätespezifisch
 WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather"
 MAP_API_KEY = "7c3HAU4Hm6tRFxQau4FQ" # dazu da, eine englischsprachige Map aufzurufen
@@ -36,6 +44,7 @@ def get_forecast(cityname):
         "units": "metric",
         "lang": "de"
     }
+    
     response = requests.get(FORECAST_URL, params=params)
 
     if response.status_code == 200:

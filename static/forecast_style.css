@@ -39,7 +39,7 @@ header h1 {
   background-color: #f0f0f0;
 }
 
-/* ========== Hauptcontainer für Vorhersage ========== */
+/* ========== Hauptcontainer ========== */
 main.forecast-container {
   flex: 1 0 auto;
   padding: 20px;
@@ -47,7 +47,7 @@ main.forecast-container {
 
 /* ========== Einzelner Stadtbereich ========== */
 .city-forecast {
-  margin-bottom: 40px;
+  margin-bottom: 60px;
   text-align: left;
 }
 
@@ -56,45 +56,71 @@ main.forecast-container {
   color: #007BFF;
 }
 
-/* ========== Scroll-Leiste für Vorhersagekarten (optional) ========== */
-.forecast-scroll {
+/* ========== Symbolleiste ========== */
+.symbolleiste {
+  padding: 20px;
+  margin-top: 20px;
+  background: linear-gradient(to bottom, #dce3ea, #cfd8e3); 
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  max-width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.symbolleiste h3 {
+  margin-bottom: 10px;
+}
+
+.symbolleiste .icons {
   display: flex;
   overflow-x: auto;
-  gap: 12px;
+  gap: 14px;
+  justify-content: flex-start;
   padding: 10px 0;
 }
 
-/* ========== Einzelne Vorhersagekarte ========== */
-.forecast-box {
-  min-width: 130px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  padding: 10px;
-  text-align: center;
+.symbol-eintrag {
+ display: flex;
+  flex-direction: column;
+  align-items: center;
   flex-shrink: 0;
+  min-width: 60px;
 }
 
-.forecast-box img {
-  width: 50px;
-  height: 50px;
+.symbol-eintrag .wochentag {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #1a73e8;
+  height: 28px; /* reserviert vertikalen Platz */
+  text-align: center;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.symbol-eintrag .wochentag.leer {
+  color: transparent; /* nimmt Platz ein, ohne sichtbar zu sein */
 }
 
-.forecast-box .time {
-  font-size: 0.8rem;
-  color: #666;
-  margin-bottom: 5px;
+.symbol-eintrag img {
+  width: 48px;
+  height: 48px;
+  image-rendering: crisp-edges;
 }
 
-.forecast-box p {
-  margin: 6px 0;
+.symbol-eintrag .uhrzeit {
+  font-size: 0.75rem;
+  color: #444;
+  margin-top: 4px;
+  text-align: center;
 }
 
 /* ========== Chart-Styling ========== */
 .city-forecast canvas {
   display: block;
-  margin: 20px auto 30px 0;
-  max-width:100%;
+  margin: 30px auto;
+  max-width: 95%;
   height: auto;
 }
 
@@ -117,9 +143,14 @@ footer {
 }
 
 /* ========== Darkmode ========== */
-body.darkmode {
+html.darkmode, body.darkmode {
   background-color: #121212;
   color: #f0f0f0;
+}
+
+body.darkmode .symbolleiste {
+  background: #1e1e1e;
+  color: #e0e0e0;
 }
 
 body.darkmode header {
@@ -142,12 +173,24 @@ body.darkmode .forecast-box {
   color: #f0f0f0;
 }
 
+body.darkmode .city-forecast {
+  background-color: transparent;
+}
+
 body.darkmode .forecast-box .time {
   color: #f0f0f0;
+}
+
+body.darkmode .symbol-eintrag .uhrzeit {
+  color: #ccc;
 }
 
 body.darkmode footer {
   background-color: #1e1e1e;
   color: #aaa;
   border-top: 1px solid #333;
+}
+
+body.darkmode .symbol-eintrag .tag {
+  color: #ccc;
 }
