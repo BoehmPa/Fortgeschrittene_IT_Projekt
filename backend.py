@@ -7,9 +7,8 @@ app = Flask(__name__)
 API_KEY = "d5184ab550c97fc5751ba70bb99170a0" # API-Key per Anmeldung erhalten, kann trotzdem verwendet werden -> nicht Gerätespezifisch
 WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather"
 
-# Hilfsfunktion: Unix-Timestamp (z. B. von Sonnenaufgang) in lesbare Uhrzeit umwandeln
+# Hilfsfunktion: Unix-Timestamp (z.B. von Sonnenaufgang) in lesbare Uhrzeit umwandeln
 def unix_to_time(ts):
-    """Wandelt Unix-Zeitstempel in 'HH:MM'-Format um"""
     return datetime.fromtimestamp(ts).strftime('%H:%M')
 
 # Startseite der App, GET zum Anzeigen, POST wenn Nutzer Städte eingegeben hat
