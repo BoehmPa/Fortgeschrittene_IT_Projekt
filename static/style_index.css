@@ -44,7 +44,7 @@ body.darkmode {
 }
 
 body.darkmode .wetter-box {
-  background: linear-gradient(to bottom, #1f1f1f, #2c2c2c);
+  /*background: linear-gradient(to bottom, #1f1f1f, #2c2c2c);*/
   color: #f0f0f0;
 }
 
@@ -211,7 +211,7 @@ body.darkmode .suchformular button:hover {
 }
 
 .wetter-box.snow-sunrise {
-  background: linear-gradient(to bottom, #e0eafc, #ffffff);
+  background: linear-gradient(to bottom, #bfd2f6, #ffffff);
 }
 
 .wetter-box.snow-sunset {
