@@ -31,7 +31,9 @@ body {
 
 .homepage-button,
 .darkmode-toggle {
-  padding: 10px 15px;
+  padding: 10px 20px;
+  background-color: #007BFF;
+  color: white;
   border: none;
   border-radius: 8px;
   font-size: 1rem;
@@ -41,29 +43,9 @@ body {
   transition: background-color 0.2s ease;
 }
 
-/* Startseiten-Button */
-.homepage-button {
-  background-color: #007BFF;
-  color: white;
-}
-.homepage-button:hover {
-  background-color: #0056b3;
-}
-
-/* Darkmode-Button */
-.darkmode-toggle {
-  background-color: #007BFF;
-  color: white;
-}
+.homepage-button:hover,
 .darkmode-toggle:hover {
   background-color: #0056b3;
-}
-.darkmode-toggle.active {
-  background-color: #444;
-  color: white;
-}
-.darkmode-toggle.active:hover {
-  background-color: #222;
 }
 
 /* ========== Overlay-Layer Buttons rechts ========== */
