@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 import requests
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 app = Flask(__name__)
 
@@ -8,8 +8,16 @@ API_KEY = "d5184ab550c97fc5751ba70bb99170a0" # API-Key per Anmeldung erhalten, k
 WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather"
 
 # Hilfsfunktion: Unix-Timestamp (z.B. von Sonnenaufgang) in lesbare Uhrzeit umwandeln
-def unix_to_time(ts):
-    return datetime.fromtimestamp(ts).strftime('%H:%M')
+def unix_to_time(timestamp, offset_seconds):
+    # Wandelt Unix-Zeit + Offset in 'HH:MM' lokale Zeit um
+    utc_time = datetime.fromtimestamp(timestamp, tz=timezone.utc) # Erstellt ein datetime-Objekt in der UTC-Zeitzone
+    local_time = utc_time + timedelta(seconds=offset_seconds) # Rechnet den Zeitzonen-Offset der Stadt drauf – z.B. +3600 für MEZ oder -18000 für New York
+    return local_time.strftime('%H:%M')
+
+def unix_to_local_datetime(timestamp, offset_seconds):
+    # Gibt ein datetime-Objekt in lokaler Zeit zurück (für Vergleiche)
+    utc_time = datetime.fromtimestamp(timestamp, tz=timezone.utc)
+    return utc_time + timedelta(seconds=offset_seconds)
 
 # Startseite der App, GET zum Anzeigen, POST wenn Nutzer Städte eingegeben hat
 @app.route("/", methods=["GET", "POST"])
@@ -34,12 +42,17 @@ def home():
                     data = response.json()  # Antwort in JSON umwandeln -> Weiterverarbeitung
 
                     # Uhrzeiten für Sonnenaufgang und Sonnenuntergang herausfinden
-                    now_local = datetime.now()
-
+                    now_local = datetime.now(timezone.utc) + timedelta(seconds=data["timezone"])
+                    
                     # Sonnenauf- und -untergang in lokale Zeit umwandeln
-                    sunrise_local = datetime.fromtimestamp(data["sys"]["sunrise"])
-                    sunset_local = datetime.fromtimestamp(data["sys"]["sunset"])
-
+                    # Diese Zeitstempel sind in UTC und müssen in die jeweilige Ortszeit der Stadt umgerechnet werden
+                    sunrise_local = unix_to_local_datetime(data["sys"]["sunrise"], data["timezone"])
+                    sunset_local = unix_to_local_datetime(data["sys"]["sunset"], data["timezone"])
+                    
+                    # Die berechneten lokalen Zeiten (datetime-Objekte) werden nun formatiert
+                    # Die Uhrzeiten werden als String im Format "HH:MM" gespeichert, um sie später im Frontend anzuzeigen
+                    sunrise_str = sunrise_local.strftime('%H:%M')
+                    sunset_str = sunset_local.strftime('%H:%M')
 
                     # Übergangsphasen definieren
                     if now_local < sunrise_local:
@@ -77,8 +90,8 @@ def home():
                         "temp_min": data["main"]["temp_min"],               # Tagesminimale Temperatur
                         "temp_max": data["main"]["temp_max"],               # Tagesmaximale Temperatur
                         "humidity": data["main"]["humidity"],               # Luftfeuchtigkeit
-                        "sunrise": unix_to_time(data["sys"]["sunrise"]),    # Sonnenaufgang 
-                        "sunset": unix_to_time(data["sys"]["sunset"]),      # Sonnenuntergang 
+                        "sunrise": sunrise_str,                             # Sonnenaufgang
+                        "sunset": sunset_str,                               # Sonnenuntergang 
                         "messzeit": datetime.fromtimestamp(data["dt"]).strftime("%d.%m.%Y %H:%M"), # umgewandelter Messzeitpunkt der Daten
                         "klasse": wetterklasse,                             # für die dynamischen Hintergründe
                         "wetter_de": wetterlage_de                          # Übersetzung der Wetterlage  
@@ -95,4 +108,4 @@ def home():
 
 # Starte die Anwendung, wenn dieses Skript direkt ausgeführt wird
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
