@@ -232,3 +232,36 @@ body.darkmode .suchformular button:hover {
   border-top: 1px solid #ccc;
   box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
 }
+
+.button-link {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007BFF;
+  color: white;
+  text-decoration: none;     /* Unterstreichung entfernen */
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  line-height: normal;
+  height: 42px;               /* Exakt gleiche Höhe wie .suchformular button */
+  vertical-align: middle;    /* Bessere Ausrichtung */
+  box-sizing: border-box;
+  margin-left: 10px;
+}
+
+.button-link:hover {
+  background-color: #0056b3;
+}
+
+body.darkmode .button-link {
+  background-color: #2a2a2a;
+  color: white;
+  border: 1px solid #444;
+}
+
+body.darkmode .button-link:hover {
+  background-color: #444;
+}

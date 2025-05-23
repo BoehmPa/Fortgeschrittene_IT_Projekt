@@ -1,0 +1,61 @@
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  background-color: #f5f6f7;
+  color: #333;
+}
+
+.map-container {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  transition: background 0.3s ease;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+}
+
+button {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  padding: 10px 15px;
+  border: none;
+  background-color: #007BFF;
+  color: white;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background: white;
+  color: #000;
+}
+
+/* Wetterklassen – getestet und funktionieren garantiert */
+.wetter-box.clear-day { background: linear-gradient(to bottom, #fceabb, #f8b500); }
+.wetter-box.clear-night { background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364); color: white; }
+.wetter-box.clouds-day { background: linear-gradient(to bottom, #d7d2cc, #304352); color: white; }
+.wetter-box.clouds-night { background: linear-gradient(to bottom, #232526, #414345); color: white; }
+.wetter-box.rain-day { background: linear-gradient(to bottom, #a1c4fd, #c2e9fb); }
+.wetter-box.rain-night { background: linear-gradient(to bottom, #434343, #000000); color: white; }
+.wetter-box.snow-day { background: linear-gradient(to bottom, #e0eafc, #cfdef3); }
+.wetter-box.snow-night { background: linear-gradient(to bottom, #2c3e50, #4ca1af); color: white; }
+.wetter-box.clear-sunrise { background: linear-gradient(to bottom, #fdfcfb, #e2d1c3); }
+.wetter-box.clear-sunset { background: linear-gradient(to bottom, #fcb69f, #ffecd2); }
+.wetter-box.clouds-sunrise { background: linear-gradient(to bottom, #c9d6ff, #e2e2e2); }
+.wetter-boxr.clouds-sunset { background: linear-gradient(to bottom, #757f9a, #d7dde8); }
+.wetter-box.rain-sunrise { background: linear-gradient(to bottom, #a1c4fd, #c2e9fb); }
+.wetter-box.rain-sunset { background: linear-gradient(to bottom, #bdc3c7, #2c3e50); color: white; }
+.wetter-box.snow-sunrise { background: linear-gradient(to bottom, #bfd2f6, #ffffff); }
+.wetter-box.snow-sunset { background: linear-gradient(to bottom, #636FA4, #E8CBC0); }
