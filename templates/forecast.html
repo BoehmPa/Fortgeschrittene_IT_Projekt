@@ -29,7 +29,7 @@
                 {% set current_day = entry.timestamp[:10] %}
                 <div class="symbol-eintrag">
                   {% if current_day != last_day %}
-                    <span class="wochentag">{{ entry.timestamp[:10] | datetimeformat('%A, %d.%m.') }}</span>
+                    <span class="wochentag">{{ entry.timestamp[:10] | datetimeformat('%A, %d.%m.') }}</span> <!--hier wird das Template aus dem Backend verwendet-->
                     {% set last_day = current_day %}
                   {% else %}
                     <span class="wochentag">&nbsp;</span>
@@ -58,7 +58,7 @@
     <p>Quelle: OpenWeatherMap • Stand: {{ forecastdata[0].forecasts[0].timestamp if forecastdata and forecastdata[0].forecasts }}</p>
   </footer>
 
-  <!-- Forecastdaten aus Flask -->
+  <!-- Forecastdaten aus Flask laden -->
   <script id="forecast-json" type="application/json">
     {{ forecastdata | tojson | safe }}
   </script>
