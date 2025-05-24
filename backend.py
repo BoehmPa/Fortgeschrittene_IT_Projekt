@@ -43,39 +43,48 @@ def unix_to_local_datetime(timestamp, offset_seconds):
     utc_time = datetime.fromtimestamp(timestamp, tz=timezone.utc)
     return utc_time + timedelta(seconds=offset_seconds)
 
+# Funktion zur Abfrage und Aufbereitung der Wettervorhersage für eine bestimmte Stadt
 def get_forecast(cityname):
+    # Parameter für die API-Anfrage
     params = {
-        "q": cityname,
-        "appid": API_KEY,
-        "units": "metric",
-        "lang": "de"
+        "q": cityname,         # Stadtname, z. B. "Berlin"
+        "appid": API_KEY,      # API-Schlüssel für OpenWeatherMap
+        "units": "metric",     # Temperatur in Celsius
+        "lang": "de"           # Sprache der Wetterbeschreibung auf Deutsch
     }
     
+    # Anfrage an die OpenWeatherMap-Vorhersage-API senden
     response = requests.get(FORECAST_URL, params=params)
 
+    # Wenn die Anfrage erfolgreich war (HTTP 200 OK)
     if response.status_code == 200:
-        raw_data = response.json()
-        forecasts = []
+        raw_data = response.json()  # Antwortdaten als JSON laden
+        forecasts = []              # Liste für strukturierte Vorhersagedaten
+
+        # Iteration über alle Einträge in der 5-Tage-Vorhersage (je 3 Stunden ein Eintrag)
         for entry in raw_data["list"]:
             forecasts.append({
-                "timestamp": entry["dt_txt"],
-                "temp": entry["main"]["temp"],
-                "description": entry["weather"][0]["description"],
-                "icon": entry["weather"][0]["icon"],
-                "humidity": entry["main"]["humidity"],
-                "wind": entry["wind"]["speed"]
+                "timestamp": entry["dt_txt"],                  # Zeitstempel (z. B. "2025-05-24 12:00:00")
+                "temp": entry["main"]["temp"],                # Temperatur in °C
+                "description": entry["weather"][0]["description"],  # Wetterbeschreibung (z. B. "leichter Regen")
+                "icon": entry["weather"][0]["icon"],          # Icon-Code zur Anzeige eines Wetterbildes
+                "humidity": entry["main"]["humidity"],        # Luftfeuchtigkeit in %
+                "wind": entry["wind"]["speed"]                # Windgeschwindigkeit in m/s
             })
 
+        # Rückgabe eines Dictionarys mit dem Stadtnamen und der Vorhersage
         return {
-            "city": raw_data["city"]["name"],
-            "forecasts": forecasts
+            "city": raw_data["city"]["name"],  # Bestätigter Stadtname von der API
+            "forecasts": forecasts             # Liste mit Wettervorhersagen
         }
     else:
+        # Fehlerfall: Rückgabe einer leeren Vorhersage mit Fehlermeldung
         return {
-            "city": cityname,
-            "forecasts": [],
-            "error": "Vorhersage nicht verfügbar"
+            "city": cityname,                  # Angefragter Stadtname (auch wenn ungültig)
+            "forecasts": [],                   # Leere Vorhersage
+            "error": "Vorhersage nicht verfügbar"  # Fehlermeldung
         }
+
 
 
 # Startseite der App, GET zum Anzeigen, POST wenn Nutzer Städte eingegeben hat

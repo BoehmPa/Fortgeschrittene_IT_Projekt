@@ -58,70 +58,78 @@
     <p>Quelle: OpenWeatherMap • Stand: {{ forecastdata[0].forecasts[0].timestamp if forecastdata and forecastdata[0].forecasts }}</p>
   </footer>
 
-  <!-- Forecastdaten aus Flask laden -->
-  <script id="forecast-json" type="application/json">
+<!-- Übergibt die forecastdata aus Flask in das HTML-Template als JSON -->
+<script id="forecast-json" type="application/json">
     {{ forecastdata | tojson | safe }}
-  </script>
+</script>
 
-  <script>
-    const forecastData = JSON.parse(document.getElementById("forecast-json").textContent);
+<script>
+  // Holt den Inhalt des JSON-Skriptelements und parst ihn als JavaScript-Objekt
+  const forecastData = JSON.parse(document.getElementById("forecast-json").textContent);
 
-    forecastData.forEach((city, index) => {
-      const ctx = document.getElementById(`chart-${index}`).getContext("2d");
+  // Iteriert über alle Städte in den Wetterdaten
+  forecastData.forEach((city, index) => {
+    // Holt das Canvas-Element für das aktuelle Diagramm
+    const ctx = document.getElementById(`chart-${index}`).getContext("2d");
 
-      const labels = city.forecasts.map(f => {
-        const [date, time] = f.timestamp.split(" ");
-        const [year, month, day] = date.split("-");
-        return `${day}.${month} ${time.slice(0, 5)}`;
-      });
-
-      const temps = city.forecasts.map(f => f.temp);
-
-      new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: `🌡️ Temperatur in ${city.city}`,
-            data: temps,
-            borderColor: '#007BFF',
-            backgroundColor: 'rgba(0, 123, 255, 0.1)',
-            fill: true,
-            tension: 0.3,
-            pointRadius: 3
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false },
-            tooltip: { mode: 'index', intersect: false }
-          },
-          scales: {
-            x: {
-              ticks: { maxRotation: 45, minRotation: 45 },
-              title: { display: false }
-            },
-            y: {
-              title: { display: false }
-            }
-          }
-        }
-      });
+    // Erstellt die X-Achsen-Beschriftungen im Format 'TT.MM HH:MM'
+    const labels = city.forecasts.map(f => {
+      const [date, time] = f.timestamp.split(" "); // z.B. "2025-05-24 15:00:00"
+      const [year, month, day] = date.split("-");
+      return `${day}.${month} ${time.slice(0, 5)}`; // "24.05 15:00"
     });
 
-    // Darkmode beim Laden wiederherstellen
-    if (localStorage.getItem("darkmode") === "true") {
-      document.body.classList.add("darkmode");
-      document.documentElement.classList.add("darkmode");
-    }
+    // Holt die Temperaturwerte aus den Forecast-Einträgen
+    const temps = city.forecasts.map(f => f.temp);
 
-    function toggleDarkmode() {
-      const isDark = document.body.classList.toggle("darkmode");
-      document.documentElement.classList.toggle("darkmode", isDark);
-      localStorage.setItem("darkmode", isDark);
-    }
-  </script>
+    // Erstellt ein neues Liniendiagramm mit Chart.js
+    new Chart(ctx, {
+      type: 'line', // Diagrammtyp: Linie
+      data: {
+        labels: labels, // X-Achse: Zeitstempel
+        datasets: [{
+          label: `🌡️ Temperatur in ${city.city}`, // Legenden-Label (optional sichtbar)
+          data: temps, // Y-Achse: Temperaturwerte
+          borderColor: '#007BFF', // Linienfarbe
+          backgroundColor: 'rgba(0, 123, 255, 0.1)', // Füllung unter der Linie
+          fill: true,
+          tension: 0.3, // Glättung der Linie
+          pointRadius: 3 // Größe der Datenpunkte
+        }]
+      },
+      options: {
+        responsive: true, // Diagramm skaliert mit Fenstergröße
+        maintainAspectRatio: false, // Verhältnis Breite/Höhe wird ignoriert
+        plugins: {
+          legend: { display: false }, // Legende ausblenden
+          tooltip: { mode: 'index', intersect: false } // Tooltips für alle Punkte bei Hover
+        },
+        scales: {
+          x: {
+            ticks: { maxRotation: 45, minRotation: 45 }, // X-Achsen-Beschriftungen leicht schräg
+            title: { display: false }
+          },
+          y: {
+            title: { display: false } // Keine Y-Achsenbeschriftung
+          }
+        }
+      }
+    });
+  });
+
+  // Stellt den Darkmode beim Laden automatisch wieder her, wenn er vorher aktiviert war
+  if (localStorage.getItem("darkmode") === "true") {
+    document.body.classList.add("darkmode");
+    document.documentElement.classList.add("darkmode");
+  }
+
+  // Funktion zum Umschalten des Darkmode
+  function toggleDarkmode() {
+    const isDark = document.body.classList.toggle("darkmode"); // Klasse auf <body> umschalten
+    document.documentElement.classList.toggle("darkmode", isDark); // Klasse auf <html> entsprechend setzen
+    localStorage.setItem("darkmode", isDark); // Einstellung im Browser speichern
+  }
+</script>
+
 </body>
 </html>
