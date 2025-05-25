@@ -232,16 +232,13 @@ body.darkmode footer {
 .wetter-box.drizzle-day {
   background: linear-gradient(to bottom, #cfd9df, #e2ebf0);
 }
-
 .wetter-box.drizzle-night {
   background: linear-gradient(to bottom, #2c3e50, #4b79a1);
   color: white;
 }
-
 .wetter-box.drizzle-sunrise {
   background: linear-gradient(to bottom, #dae2f8, #d6a4a4);
 }
-
 .wetter-box.drizzle-sunset {
   background: linear-gradient(to bottom, #485563, #29323c);
   color: white;
@@ -264,7 +261,7 @@ body.darkmode footer {
 
 /* ========== Link-Buttons (Startseite etc.) ========== */
 .button-link {
-   display: flex;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
