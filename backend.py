@@ -31,6 +31,20 @@ weatherdata_global = []  # globale Variable für die Wetterdaten
 # HILFSFUNKTIONEN
 # ================================
 
+# Definiert einen benutzerdefinierten Jinja2-Template-Filter namens 'datetimeformat'
+@app.template_filter('datetimeformat')
+def datetimeformat(value, format='%A, %d.%m.'):
+    # Überprüft, ob der übergebene Wert nur ein Datum im Format 'YYYY-MM-DD' ist (also genau 10 Zeichen)
+    if len(value) == 10:  
+        # Wandelt den String in ein datetime-Objekt um
+        dt = datetime.strptime(value, '%Y-%m-%d')
+    else:
+        # Falls zusätzlich eine Uhrzeit enthalten ist, wird das erweiterte Format verwendet
+        dt = datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
+    
+    # Formatiert das datetime-Objekt in das gewünschte Ausgabeformat (z. B. "Montag, 20.05.")
+    return dt.strftime(format)
+
 # Hilfsfunktion: Unix-Timestamp (z.B. von Sonnenaufgang) in lesbare Uhrzeit umwandeln
 def unix_to_time(timestamp, offset_seconds):
     # Wandelt Unix-Zeit + Offset in 'HH:MM' lokale Zeit um
