@@ -55,7 +55,7 @@
           <!-- Temperaturdiagramm -->
           <div class="chart-wrapper">
             <div class="chart-container">
-              <canvas id="chart-{{ loop.index0 }}"></canvas>
+              <canvas id="chart-{{ loop.index0 }}"></canvas> <!--ID wird unten im Skript-Teil benötigt-->
             </div>
           </div>
         {% else %}
@@ -82,15 +82,15 @@
 
     // Erzeugt für jede Stadt ein Liniendiagramm
     forecastData.forEach((city, index) => {
-      const ctx = document.getElementById(`chart-${index}`).getContext("2d");
+      const ctx = document.getElementById(`chart-${index}`).getContext("2d"); // ctx = context -> klassische Namenskonvention 
 
-      const labels = city.forecasts.map(f => {
-        const [date, time] = f.timestamp.split(" ");
-        const [year, month, day] = date.split("-");
-        return `${day}.${month} ${time.slice(0, 5)}`; // Format: "24.05 15:00"
+      const labels = city.forecasts.map(f => { //Es wird eine Liste von Zeitpunkten als Labes erzeugt
+        const [date, time] = f.timestamp.split(" "); // Zuerst sieht der Zeitpunkt so aus: "2025-05-24 15:00:00"
+        const [year, month, day] = date.split("-");   // Dann so: "2025", "05", "24"
+        return `${day}.${month} ${time.slice(0, 5)}`; // Am Ende liegt er in diesem Format vor: "24.05 15:00"
       });
 
-      const temps = city.forecasts.map(f => f.temp);
+      const temps = city.forecasts.map(f => f.temp); // Hier werden die Temperaturen extrahiert, um diese als Datenpunkte zu verwenden
 
       new Chart(ctx, {
         type: 'line',
@@ -101,7 +101,6 @@
             data: temps,
             borderColor: '#007BFF',
             backgroundColor: 'rgba(0, 123, 255, 0.1)',
-
             fill: true,
             tension: 0.3,
             pointRadius: 3
