@@ -122,7 +122,15 @@ body {
 .wetter-box.rain-sunset { background: linear-gradient(to bottom, #bdc3c7, #2c3e50); color: white; }
 .wetter-box.snow-sunrise { background: linear-gradient(to bottom, #bfd2f6, #ffffff); }
 .wetter-box.snow-sunset { background: linear-gradient(to bottom, #636FA4, #E8CBC0); }
-.wetter-box.drizzle-day {background: linear-gradient(to bottom, #cad9e3, #c1cbd0); }
-.wetter-box.drizzle-night {background: linear-gradient(to bottom,#2c3e50, #4b79a1); color: white; }
-.wetter-box.drizzle-sunrise{background: linear-gradient(to bottom, #dae2f8, #d6a4a4); }
-.wetter-box.drizzle-sunset{background: linear-gradient(to bottom, #485563, #29323c); color: white; }
+.wetter-box.drizzle-day { background: linear-gradient(to bottom, #cad9e3, #c1cbd0); }
+.wetter-box.drizzle-night { background: linear-gradient(to bottom,#2c3e50, #4b79a1); color: white; }
+.wetter-box.drizzle-sunrise{ background: linear-gradient(to bottom, #dae2f8, #d6a4a4); }
+.wetter-box.drizzle-sunset{ background: linear-gradient(to bottom, #485563, #29323c); color: white; }
+.wetter-box.thunderstorm-day { background: linear-gradient(to bottom, #4b79a1, #283e51); color: white; }
+.wetter-box.thunderstorm-night { background: linear-gradient(to bottom, #1f1c2c, #928dab); color: white; }
+.wetter-box.thunderstorm-sunrise { background: linear-gradient(to bottom, #4b6cb7, #182848); color: white; }
+.wetter-box.thunderstorm-sunset { background: linear-gradient(to bottom, #614385, #516395); color: white; }
+.wetter-box.mist-day { background: linear-gradient(to bottom, #d7d2cc, #e3e3e3); color: #333; }
+.wetter-box.mist-night { background: linear-gradient(to bottom, #3e5151, #decba4); color: white; }
+.wetter-box.mist-sunrise { background: linear-gradient(to bottom, #d3cce3, #e9e4f0); color: #333; }
+.wetter-box.mist-sunset { background: linear-gradient(to bottom, #9796f0, #fbc7d4);color: #333; }
