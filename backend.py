@@ -155,8 +155,8 @@ def home():
                     weatherdata.append({
                         "name": data["name"],                               # Stadtname
                         "icon": data["weather"][0]["icon"],                 # Wetter-Icon
-                        "weather": data["weather"][0]["main"],               # z.B. "Rain"
-                        "description": data["weather"][0]["description"],  # z.B. "leichter Regen"
+                        "weather": data["weather"][0]["main"],              # z.B. "Rain"
+                        "description": data["weather"][0]["description"],   # z.B. "leichter Regen"
                         "temp": data["main"]["temp"],                       # Temperatur
                         "feels_like": data["main"]["feels_like"],           # Gefühlt wie
                         "temp_min": data["main"]["temp_min"],               # Tagesminimale Temperatur
@@ -167,7 +167,7 @@ def home():
                         "messzeit": datetime.fromtimestamp(data["dt"]).strftime("%d.%m.%Y %H:%M"), # umgewandelter Messzeitpunkt der Daten
                         "weather_class": weather_class,                     # für die dynamischen Hintergründe
                         "weather_ger": weatherclass_ger,                    # Übersetzung der Wetterlage  
-                        "local_time": local_time_str,                        # Ortszeit
+                        "local_time": local_time_str,                       # Ortszeit
                         "coord": {                                          # Koordinaten für Map
                             "lat": data["coord"]["lat"],
                             "lon": data["coord"]["lon"]}
