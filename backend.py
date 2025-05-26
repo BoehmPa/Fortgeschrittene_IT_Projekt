@@ -1,14 +1,18 @@
 from flask import Flask, render_template, request
 import requests
 from datetime import datetime, timedelta, timezone
+import os
+from dotenv import load_dotenv 
 
 app = Flask(__name__)
 
+load_dotenv() # laden der .env-Datei
 
-API_KEY = "d5184ab550c97fc5751ba70bb99170a0" # API-Key per Anmeldung erhalten, kann trotzdem verwendet werden -> nicht Gerätespezifisch
+API_KEY = os.getenv("API_KEY")
+MAP_API_KEY = os.getenv("MAP_API_KEY")
 WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather"
-MAP_API_KEY = "7c3HAU4Hm6tRFxQau4FQ" # dazu da, eine englischsprachige Map aufzurufen
 FORECAST_URL = "https://api.openweathermap.org/data/2.5/forecast"
+
 
 
 weatherdata_global = []  # globale Variable für die Wetterdaten
