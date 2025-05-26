@@ -185,6 +185,7 @@ body.darkmode footer {
 }
 .wetter-box.clouds-day {
   background: linear-gradient(to bottom, #d7d2cc, #304352);
+  color: white;
 }
 .wetter-box.clouds-night {
   background: linear-gradient(to bottom, #232526, #414345);
@@ -248,7 +249,7 @@ body.darkmode footer {
   color: white;
 }
 .wetter-box.thunderstorm-night {
-  background: linear-gradient(to bottom, #1f1c2c, #928dab); /* dunkle, blitzartige Stimmung */
+  background: linear-gradient(to bottom, #1f1c2c, #928dab); 
   color: white;
 }
 .wetter-box.thunderstorm-sunrise {
