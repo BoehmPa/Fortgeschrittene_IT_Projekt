@@ -3,24 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <title>5-Tage-Vorhersage</title>
+
+  <!-- Stylesheet für das Forecast-Layout -->
   <link rel="stylesheet" href="{{ url_for('static', filename='forecast_style.css') }}">
+
+  <!-- Google-Font "Inter" -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Chart.js für Temperaturverlauf -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
+
+  <!-- Kopfbereich mit Navigation -->
   <header>
     <h1>🌤️ Wettervorhersage</h1>
     <a href="/" class="button-link">🏠 Zurück zur Startseite</a>
     <button onclick="toggleDarkmode()" class="button-link">🌗 Darkmode</button>
   </header>
 
+  <!-- Hauptinhalt der Seite -->
   <main class="forecast-container">
     {% for city in forecastdata %}
       <section class="city-forecast">
         <h2>{{ city.city }}</h2>
 
         {% if city.forecasts %}
-          <!-- Wetter-Symbole -->
+          <!-- Symbolleiste für Wetterverlauf -->
           <div class="symbolleiste">
             <h3>Wetterverlauf</h3>
             <div class="icons">
@@ -29,7 +39,8 @@
                 {% set current_day = entry.timestamp[:10] %}
                 <div class="symbol-eintrag">
                   {% if current_day != last_day %}
-                    <span class="wochentag">{{ entry.timestamp[:10] | datetimeformat('%A, %d.%m.') }}</span> <!--hier wird das Template aus dem Backend verwendet-->
+                    <!-- Neuer Tag beginnt: Wochentag anzeigen -->
+                    <span class="wochentag">{{ entry.timestamp[:10] | datetimeformat('%A, %d.%m.') }}</span>
                     {% set last_day = current_day %}
                   {% else %}
                     <span class="wochentag">&nbsp;</span>
@@ -41,95 +52,94 @@
             </div>
           </div>
 
-          <!-- Temperatur-Chart -->
+          <!-- Temperaturdiagramm -->
           <div class="chart-wrapper">
             <div class="chart-container">
               <canvas id="chart-{{ loop.index0 }}"></canvas>
             </div>
           </div>
         {% else %}
+          <!-- Fehlermeldung, falls keine Daten vorhanden -->
           <p class="error">❗Keine Vorhersagedaten verfügbar.</p>
         {% endif %}
       </section>
     {% endfor %}
   </main>
 
+  <!-- Seitenfuß mit Datenquelle -->
   <footer>
     <p>Quelle: OpenWeatherMap • Stand: {{ forecastdata[0].forecasts[0].timestamp if forecastdata and forecastdata[0].forecasts }}</p>
   </footer>
 
-<!-- Übergibt die forecastdata aus Flask in das HTML-Template als JSON -->
-<script id="forecast-json" type="application/json">
+  <!-- Übergibt die Forecastdaten aus Flask ins HTML als JSON -->
+  <script id="forecast-json" type="application/json">
     {{ forecastdata | tojson | safe }}
-</script>
+  </script>
 
-<script>
-  // Holt den Inhalt des JSON-Skriptelements und parst ihn als JavaScript-Objekt
-  const forecastData = JSON.parse(document.getElementById("forecast-json").textContent);
+  <script>
+    // Holt den Inhalt des JSON-Blocks und wandelt ihn in JS-Objekte um
+    const forecastData = JSON.parse(document.getElementById("forecast-json").textContent);
 
-  // Iteriert über alle Städte in den Wetterdaten
-  forecastData.forEach((city, index) => {
-    // Holt das Canvas-Element für das aktuelle Diagramm
-    const ctx = document.getElementById(`chart-${index}`).getContext("2d");
+    // Erzeugt für jede Stadt ein Liniendiagramm
+    forecastData.forEach((city, index) => {
+      const ctx = document.getElementById(`chart-${index}`).getContext("2d");
 
-    // Erstellt die X-Achsen-Beschriftungen im Format 'TT.MM HH:MM'
-    const labels = city.forecasts.map(f => {
-      const [date, time] = f.timestamp.split(" "); // z.B. "2025-05-24 15:00:00"
-      const [year, month, day] = date.split("-");
-      return `${day}.${month} ${time.slice(0, 5)}`; // "24.05 15:00"
-    });
+      const labels = city.forecasts.map(f => {
+        const [date, time] = f.timestamp.split(" ");
+        const [year, month, day] = date.split("-");
+        return `${day}.${month} ${time.slice(0, 5)}`; // Format: "24.05 15:00"
+      });
 
-    // Holt die Temperaturwerte aus den Forecast-Einträgen
-    const temps = city.forecasts.map(f => f.temp);
+      const temps = city.forecasts.map(f => f.temp);
 
-    // Erstellt ein neues Liniendiagramm mit Chart.js
-    new Chart(ctx, {
-      type: 'line', // Diagrammtyp: Linie
-      data: {
-        labels: labels, // X-Achse: Zeitstempel
-        datasets: [{
-          label: `🌡️ Temperatur in ${city.city}`, // Legenden-Label (optional sichtbar)
-          data: temps, // Y-Achse: Temperaturwerte
-          borderColor: '#007BFF', // Linienfarbe
-          backgroundColor: 'rgba(0, 123, 255, 0.1)', // Füllung unter der Linie
-          fill: true,
-          tension: 0.3, // Glättung der Linie
-          pointRadius: 3 // Größe der Datenpunkte
-        }]
-      },
-      options: {
-        responsive: true, // Diagramm skaliert mit Fenstergröße
-        maintainAspectRatio: false, // Verhältnis Breite/Höhe wird ignoriert
-        plugins: {
-          legend: { display: false }, // Legende ausblenden
-          tooltip: { mode: 'index', intersect: false } // Tooltips für alle Punkte bei Hover
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: `🌡️ Temperatur in ${city.city}`,
+            data: temps,
+            borderColor: '#007BFF',
+            backgroundColor: 'rgba(0, 123, 255, 0.1)',
+
+            fill: true,
+            tension: 0.3,
+            pointRadius: 3
+          }]
         },
-        scales: {
-          x: {
-            ticks: { maxRotation: 45, minRotation: 45 }, // X-Achsen-Beschriftungen leicht schräg
-            title: { display: false }
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: { mode: 'index', intersect: false }
           },
-          y: {
-            title: { display: false } // Keine Y-Achsenbeschriftung
+          scales: {
+            x: {
+              ticks: { maxRotation: 45, minRotation: 45 },
+              title: { display: false }
+            },
+            y: {
+              title: { display: false }
+            }
           }
         }
-      }
+      });
     });
-  });
 
-  // Stellt den Darkmode beim Laden automatisch wieder her, wenn er vorher aktiviert war
-  if (localStorage.getItem("darkmode") === "true") {
-    document.body.classList.add("darkmode");
-    document.documentElement.classList.add("darkmode");
-  }
+    // Stellt den Darkmode beim Laden automatisch wieder her, wenn er vorher aktiv war
+    if (localStorage.getItem("darkmode") === "true") {
+      document.body.classList.add("darkmode");
+      document.documentElement.classList.add("darkmode");
+    }
 
-  // Funktion zum Umschalten des Darkmode
-  function toggleDarkmode() {
-    const isDark = document.body.classList.toggle("darkmode"); // Klasse auf <body> umschalten
-    document.documentElement.classList.toggle("darkmode", isDark); // Klasse auf <html> entsprechend setzen
-    localStorage.setItem("darkmode", isDark); // Einstellung im Browser speichern
-  }
-</script>
+    // Funktion zum Umschalten des Darkmode
+    function toggleDarkmode() {
+      const isDark = document.body.classList.toggle("darkmode");
+      document.documentElement.classList.toggle("darkmode", isDark);
+      localStorage.setItem("darkmode", isDark);
+    }
+  </script>
 
 </body>
 </html>
