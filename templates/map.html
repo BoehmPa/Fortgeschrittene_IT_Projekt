@@ -35,7 +35,7 @@
   </aside>
 
   <!-- Leaflet-Kartenbibliothek (JS) -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script> <!-- stellt das Objekt "L" zur Verfügung. L ist hier das globale Objekt von Leaflet, also der verwendeten Kartenbibliothek -->
 
   <script>
     // MapTiler-API-Key wird aus dem Flask-Backend übergeben
@@ -45,7 +45,7 @@
     const apiKey = "{{ api_key }}";
 
     // Lightmode-Karte: MapTiler Basic (englisch beschriftet)
-    const lightTiles = L.tileLayer(`https://api.maptiler.com/maps/basic/{z}/{x}/{y}.png?key=${mapKey}`, {
+    const lightTiles = L.tileLayer(`https://api.maptiler.com/maps/basic/{z}/{x}/{y}.png?key=${mapKey}`, { // L.tileLayer lädt einen betimmten Kartenstil als "Layer" bzw. Karte
       tileSize: 512,
       zoomOffset: -1,
       attribution: '&copy; <a href="https://www.maptiler.com/copyright/">MapTiler</a>',
@@ -93,7 +93,7 @@
 
     // Wetteroverlays (OpenWeatherMap) vorbereiten
     const overlays = {
-      temp: L.tileLayer(`https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=${apiKey}`, { opacity: 0.6 }),
+      temp: L.tileLayer(`https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=${apiKey}`, { opacity: 0.6 }), // Deckkraft der Layer definiert
       clouds: L.tileLayer(`https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=${apiKey}`, { opacity: 0.6 }),
       precipitation: L.tileLayer(`https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=${apiKey}`, { opacity: 0.6 }),
       wind: L.tileLayer(`https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=${apiKey}`, { opacity: 0.6 })
@@ -118,7 +118,7 @@
     }
 
     // Wetterdaten vom Server holen (vom Flask-Backend)
-    const weatherData = JSON.parse('{{ weatherdata | tojson | safe }}');
+    const weatherData = JSON.parse('{{ weatherdata | tojson | safe }}'); // safe sorgt dafür das Sonderzeichen nicht in HTML umgewandelt werden -> das würde die JSON kaputt machen. Deswegen wird der JSON-String roh ausgegeben
 
     // Marker für jede Stadt anzeigen
     weatherData.forEach(city => {
