@@ -107,7 +107,7 @@ def home():
                     "lang": "de"             # Sprache: Deutsch
                 }
                 # Anfrage an OpenWeatherMap senden
-                response = requests.get(WEATHER_URL, params=params)
+                response = requests.get(WEATHER_URL, params=params) # gibt ein Respone OBJEKT zurück keine JSON
                 if response.status_code == 200:
                     data = response.json()  # Antwort in JSON umwandeln -> Weiterverarbeitung
 
