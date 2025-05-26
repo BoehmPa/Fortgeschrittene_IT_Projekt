@@ -48,7 +48,7 @@ def unix_to_local_datetime(timestamp, offset_seconds):
 def get_forecast(cityname):
     # Parameter für die API-Anfrage
     params = {
-        "q": cityname,         # Stadtname, z. B. "Berlin"
+        "q": cityname,         # Stadtname,
         "appid": API_KEY,      # API-Schlüssel für OpenWeatherMap
         "units": "metric",     # Temperatur in Celsius
         "lang": "de"           # Sprache der Wetterbeschreibung auf Deutsch
